@@ -1,0 +1,59 @@
+import drake
+import drake.cxx
+
+def configure(cxx_config = drake.cxx.Config(),
+              cxx_toolkit = drake.cxx.Toolkit()):
+
+  #
+  # Config.
+  #
+  cxx_config.flag('-std=c++14')
+
+  #
+  # Rules.
+  #
+  rule_lib = drake.Rule('lib')
+  rule_bin = drake.Rule('bin')
+  rule_tests = drake.Rule('tests')
+  rule_check = drake.Rule('check')
+
+  #
+  # Sources.
+  #
+  sources = drake.nodes()
+
+  #
+  # Libraries.
+  #
+  lib = drake.cxx.DynLib(
+    'lib/lib',
+    sources,
+    cxx_toolkit,
+    cxx_config)
+  rule_lib << lib
+
+  #
+  # Binaries.
+  #
+  bin = drake.cxx.Executable(
+    'bin/bin',
+    drake.nodes('src/main.cc',) + [lib],
+    cxx_toolkit,
+    cxx_config)
+  rule_bin << bin
+
+  #
+  # Tests.
+  #
+  cxx_config_test = drake.cxx.Config(cxx_config)
+  for name in [
+  ]:
+    test = drake.cxx.Executable(
+      'tests/' + name,
+      drake.nodes('tests/' + name + '.cc',) + [lib],
+      cxx_toolkit,
+      cxx_config_test)
+    rule_test << test
+    runner = drake.Runner(exe = test)
+    runner.reporting = drake.Runner.Reporting.on_failure
+    rule_check << runner.status
