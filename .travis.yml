@@ -48,7 +48,7 @@ after_script:
   # Commit using the sha1 of the commit as message.
   - git commit -m "$TRAVIS_COMMIT" --allow-empty
   # Push.
-  - git push --force GitHub HEAD:meta
+  - git push --force GitHub HEAD:refs/heads/meta
 
 # blocklist
 branches:
