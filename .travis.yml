@@ -11,13 +11,12 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
+            - "python3-pip"
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
-addons:
-  apt:
-    packages:
-      - "python3-pip"
+before_install:
+    - eval "${MATRIX_EVAL}"
 
 install:
   - pip3 install --user -r drake/requirements.txt
