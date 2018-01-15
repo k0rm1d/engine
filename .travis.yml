@@ -1,5 +1,16 @@
+language: cpp
+dist: trusty
+python: 3.6
+
+addons:
+  apt:
+    packages:
+      - "python3-pip"
+
+install:
+  - pip3 install --user -r drake/requirements.txt
+
 before_script:
-  - pip3 install -r drake/requirements.txt
   - |
 
        declare -r SSH_FILE="$(mktemp -u $HOME/.ssh/XXXXXX)"
