@@ -12,8 +12,8 @@ def configure(cxx_config = drake.cxx.Config(),
   #
   # Rules.
   #
-  rule_lib = drake.Rule('lib')
-  rule_bin = drake.Rule('bin')
+  rule_libs = drake.Rule('libs')
+  rule_bins = drake.Rule('bins')
   rule_tests = drake.Rule('tests')
   rule_check = drake.Rule('check')
 
@@ -30,7 +30,7 @@ def configure(cxx_config = drake.cxx.Config(),
     sources,
     cxx_toolkit,
     cxx_config)
-  rule_lib << lib
+  rule_libs << lib
 
   #
   # Binaries.
@@ -40,7 +40,7 @@ def configure(cxx_config = drake.cxx.Config(),
     drake.nodes('src/main.cc',) + [lib],
     cxx_toolkit,
     cxx_config)
-  rule_bin << bin
+  rule_bins << bin
 
   #
   # Tests.

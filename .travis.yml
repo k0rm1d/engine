@@ -39,7 +39,8 @@ before_script:
   - mkdir -p .meta/{status,duration,coverage}
 
 script:
-  - cd "$TRAVIS_BUILD_DIR"/_build/linux64 && ./drake //build -j 2
+  - cd "$TRAVIS_BUILD_DIR"/_build/linux64 && ./drake //libs -j 2
+  - cd "$TRAVIS_BUILD_DIR"/_build/linux64 && ./drake //bins -j 2
   - cd "$TRAVIS_BUILD_DIR"/_build/linux64 && ./drake //check -j 2
 
 after_script:
