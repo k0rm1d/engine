@@ -1,4 +1,5 @@
 before_script:
+  - pip3 install -r drake/requirements.txt
   - |
 
        declare -r SSH_FILE="$(mktemp -u $HOME/.ssh/XXXXXX)"
