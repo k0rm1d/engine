@@ -74,7 +74,11 @@ def configure(cxx_config = drake.cxx.Config(),
   #
   # Sources.
   #
-  sources = drake.nodes()
+  sources = drake.nodes(
+    "src/tachyon/rendering/GLFW.hh",
+    "src/tachyon/rendering/GLFW.cc",
+  )
+  cxx_config.add_local_include_path("src")
 
   #
   # Libraries.
