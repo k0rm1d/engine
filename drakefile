@@ -1,21 +1,75 @@
 import drake
 import drake.cxx
 
+from drake_modules.vulkan import Vulkan
+from drake_modules.GLFW import GLFW
+from drake_modules.TinyOBJ import TinyOBJ
+from drake_modules.imgui import imgui
+from drake_modules.gli import GLI
+from drake_modules.assimp import Assimp
+
+libraries = []
+dependencies_headers = []
+
 def configure(cxx_config = drake.cxx.Config(),
               cxx_toolkit = drake.cxx.Toolkit()):
 
   #
   # Config.
   #
-  cxx_config.flag('-std=c++14')
+  cxx_config.flag('-std=c++17')
 
   #
   # Rules.
   #
   rule_libs = drake.Rule('libs')
   rule_bins = drake.Rule('bins')
+  rule_dependencies = drake.Rule('deps')
   rule_tests = drake.Rule('tests')
   rule_check = drake.Rule('check')
+
+  #
+  # Libraries
+  #
+  global libraries
+  cxx_config.lib_path_runtime("libs")
+  cxx_config.lib('X11')
+  cxx_config.lib('Xrandr')
+  cxx_config.lib('Xi')
+  cxx_config.lib('Xcursor')
+  cxx_config.lib('Xxf86vm')
+  cxx_config.lib('Xinerama')
+  cxx_config.lib('X11-xcb')
+  cxx_config.lib('xcb')
+
+  #
+  # Dependencies.
+  #
+
+  def import_module(module):
+    cxx_config.add_local_include_path(module.include_path)
+    libs = drake.copy(module.libraries, "libs", strip_prefix = True)
+    global dependencies_headers
+    dependencies_headers += module.headers
+    global libraries
+    libraries += libs
+    rule_dependencies << libs
+    return module, libs
+
+  # Vulkan.
+  vulkan, vulkan_libraries = import_module(Vulkan(version = "1.0.65.0"))
+
+  # GLFW.
+  _, glfw_libraries = import_module(GLFW(version = "3.2.1"))
+
+  # # GLI
+  # _, gli_libraries = import_module(GLI(version = "0.8.2.0"))
+
+  # JSON.
+  cxx_config.add_local_include_path('third_party')
+
+  # # STB.
+  # cxx_config.add_local_include_path("stb")
 
   #
   # Sources.
